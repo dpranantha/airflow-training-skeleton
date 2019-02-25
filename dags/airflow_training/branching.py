@@ -1,9 +1,10 @@
 import airflow
 
 from airflow.models import DAG
-from airflow.operators.bash_operator import BashOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import BranchPythonOperator, PythonOperator
+
+import datetime
 
 args = {
     "owner": "godatadriven",
@@ -37,12 +38,13 @@ weekday_person_to_email = {
     6: "Alice",  # Sunday
 }
 
-def print_person():
-    print(weekday_person_to_email)
+def print_person(execution_date, **context):
+    print(weekday_person_to_email[execution_date.weekday()])
 
 branching = BranchPythonOperator(
     task_id='branching',
     python_callable=print_person,
+    provide_context=True,
     dag=dag, )
 
 email = [ DummyOperator(
