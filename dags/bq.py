@@ -29,10 +29,10 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.models import Variable
 
 
-def send_to_slack_func(**context):
+def send_to_slack_func(execution_date, **context):
     operator = SlackAPIPostOperator(
         task_id='postTopCommitter',
-        text=str(context['task_instance'].xcom_pull(task_ids='bq_fetch_data')),
+        text=execution_date.strftime("%a")+": "+str(context['task_instance'].xcom_pull(task_ids='bq_fetch_data')),
         token=Variable.get('slack_token'),
         channel='general'
     )
