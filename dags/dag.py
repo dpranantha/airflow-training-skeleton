@@ -15,20 +15,13 @@ the_start = BashOperator(
     task_id="print_exec_date", bash_command="echo {{ execution_date }}", dag=dag
 )
 
-wait_5 = BashOperator(
-    task_id="wait_5", bash_command="sleep 5", dag=dag
-)
-
-wait_1 = BashOperator(
-    task_id="wait_1", bash_command="sleep 1", dag=dag
-)
-
-wait_10 = BashOperator(
-    task_id="wait_10", bash_command="sleep 10", dag=dag
-)
+wait_tasks = [
+    BashOperator(task_id="wait_" + str(w), bash_command="sleep " + str(w), dag=dag)
+    for w in [1, 5, 10]
+]
 
 the_end = DummyOperator (
     task_id="the_end", dag=dag
 )
 
-the_start >> [wait_5, wait_1, wait_10] >> the_end
+the_start >> wait_tasks >> the_end
