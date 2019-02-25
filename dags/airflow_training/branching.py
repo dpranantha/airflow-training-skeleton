@@ -43,7 +43,7 @@ def print_person(name):
 branching = BranchPythonOperator(
     task_id='branching',
     python_callable=print_person,
-    dag=dag)
+    dag=dag, )
 
 for (k, v) in weekday_person_to_email:
     t = DummyOperator(
