@@ -45,14 +45,9 @@ branching = BranchPythonOperator(
     python_callable=print_person,
     dag=dag, )
 
-countMap = {}
-for v in weekday_person_to_email.values():
-    countMap[v] = countMap.get(v,0) + 1
-uni = [ v for k, v in weekday_person_to_email.items() if countMap[v] == 1]
-
 email = [ DummyOperator(
     task_id='email_' + str(v),
-    dag=dag,) for v in uni]
+    dag=dag,) for v in set(branching.values())]
 
 final_task = DummyOperator(
     task_id='final_task',
