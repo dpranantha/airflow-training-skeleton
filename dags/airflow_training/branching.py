@@ -47,7 +47,7 @@ branching = BranchPythonOperator(
 
 email = [ DummyOperator(
     task_id='email_' + str(v),
-    dag=dag,) for v in set(branching.values())]
+    dag=dag,) for v in set(weekday_person_to_email.values())]
 
 final_task = DummyOperator(
     task_id='final_task',
