@@ -37,8 +37,8 @@ weekday_person_to_email = {
     6: "Alice",  # Sunday
 }
 
-def print_person(name):
-    print(name)
+def print_person():
+    print(weekday_person_to_email)
 
 branching = BranchPythonOperator(
     task_id='branching',
