@@ -5,11 +5,11 @@ from airflow_training.operators.bigquery_get_data import BigQueryGetDataOperator
 from airflow.operators.slack_operator import SlackAPIPostOperator
 
 dag = DAG(
-    dag_id='godatafest',
+    dag_id='newone',
     schedule_interval='@daily',
     default_args={
         'owner': 'GoDataDriven',
-        'start_date': airflow.utils.dates.days_ago(2)
+        'start_date': airflow.utils.dates.days_ago(15)
     }
 )
 
