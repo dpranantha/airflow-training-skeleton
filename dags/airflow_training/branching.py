@@ -39,7 +39,7 @@ weekday_person_to_email = {
 }
 
 def print_person(execution_date, **context):
-    print(weekday_person_to_email[execution_date.weekday()])
+    weekday_person_to_email[execution_date.weekday()]
 
 branching = BranchPythonOperator(
     task_id='branching',
