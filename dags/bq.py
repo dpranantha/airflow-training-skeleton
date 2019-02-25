@@ -37,7 +37,7 @@ def send_to_slack_func(**context):
     #     channel=Variable.get("slack_channel")
     # )
     # return operator.execute(context=context)
-    print context
+    print(context)
 
 
 send_to_slack = PythonOperator(
