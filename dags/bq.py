@@ -17,7 +17,7 @@ bq_fetch_data = BigQueryGetDataOperator(
     task_id='bq_fetch_data',
     sql="""SELECT author.name, COUNT(author.name) topcommitter 
         FROM [bigquery-public-data.github_repos.commits]
-        WHERE DATE(committer.date) = '{{ dt }}' 
+        WHERE DATE(committer.date) = '{{ ds }}' 
         AND repo_name LIKE '%airflow%'
         GROUP BY author.name
         ORDER BY topcommitter desc
@@ -30,13 +30,14 @@ from airflow.models import Variable
 
 
 def send_to_slack_func(**context):
-    operator = SlackAPIPostOperator(
-        task_id='failure',
-        text=str(context['task_instance']),
-        token=Variable.get("slack_access_token"),
-        channel=Variable.get("slack_channel")
-    )
-    return operator.execute(context=context)
+    # operator = SlackAPIPostOperator(
+    #     task_id='failure',
+    #     text=str(context['task_instance']),
+    #     token=Variable.get("slack_access_token"),
+    #     channel=Variable.get("slack_channel")
+    # )
+    # return operator.execute(context=context)
+    print context
 
 
 send_to_slack = PythonOperator(
