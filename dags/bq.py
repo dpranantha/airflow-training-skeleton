@@ -1,7 +1,7 @@
 import airflow
 
 from airflow import DAG
-from dags.airflow_training.operators.bigquery_get_data import BigQueryGetDataOperator
+from airflow_training.operators.bigquery_get_data import BigQueryGetDataOperator
 from airflow.operators.slack_operator import SlackAPIPostOperator
 
 dag = DAG(
