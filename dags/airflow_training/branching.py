@@ -53,6 +53,7 @@ email = [ DummyOperator(
 
 final_task = DummyOperator(
     task_id='final_task',
+    trigger_rule='one_success',
     dag=dag,
 )
 
