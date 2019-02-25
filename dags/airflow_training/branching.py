@@ -3,8 +3,7 @@ import airflow
 from airflow.models import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import BranchPythonOperator, PythonOperator
-
-import datetime
+from airflow.utils.trigger_rule import TriggerRule
 
 args = {
     "owner": "godatadriven",
@@ -53,7 +52,7 @@ email = [ DummyOperator(
 
 final_task = DummyOperator(
     task_id='final_task',
-    trigger_rule='one_success',
+    trigger_rule=TriggerRule.ONE_SUCCESS,
     dag=dag,
 )
 
