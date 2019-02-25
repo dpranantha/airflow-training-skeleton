@@ -45,16 +45,14 @@ branching = BranchPythonOperator(
     python_callable=print_person,
     dag=dag, )
 
+email = [ DummyOperator(
+    task_id='email_' + str(v),
+    dag=dag,) for (k, v) in weekday_person_to_email.items()]
+
 final_task = DummyOperator(
     task_id='final_task',
     dag=dag,
 )
 
-for (k, v) in weekday_person_to_email.items():
-    t = DummyOperator(
-        task_id='email_' + str(v),
-        dag=dag,
-    )
-
-    print_weekday >> branching >> t >> final_task
+print_weekday >> branching >> email >> final_task
 
