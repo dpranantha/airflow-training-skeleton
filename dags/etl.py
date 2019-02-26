@@ -8,6 +8,7 @@ from airflow.contrib.operators.dataproc_operator import (
     DataProcPySparkOperator,
 )
 from airflow.utils.trigger_rule import TriggerRule
+from airflow_training.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 
 dag = DAG(
     dag_id="etl_airflow",
@@ -52,7 +53,9 @@ compute_aggregates = DataProcPySparkOperator(
     cluster_name='analyse-pricing-{{ ds }}',
     arguments=[
         "gs://dpranantha/{{ ds }}/land_price_uk_*.json",
-        "gs://dpranantha/{{ ds }}/currency_*.json"],
+        "gs://dpranantha/{{ ds }}/currency_*.json",
+        "gs://dpranantha/{{ ds }}/"
+    ],
     dag=dag,
 )
 
@@ -63,6 +66,15 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     trigger_rule=TriggerRule.ALL_DONE,
     dag=dag,
 )
+
+gcsBq = GoogleCloudStorageToBigQueryOperator(
+    task_id="write_to_bq",
+    bucket="dpranantha",
+    source_objects=["average_prices/transfer_date={{ ds }}/*"],
+    destination_project_dataset_table="gdd-airflow-training:prices.land_registry_price${{ ds_nodash }}",
+    source_format="PARQUET",
+    write_disposition="WRITE_TRUNCATE",
+    dag=dag, )
 
 pgsl_to_gcs >> dataproc_create_cluster
 currencies >> dataproc_create_cluster
