@@ -25,7 +25,7 @@ http_to_gcs = HttpToGcsOperator(
     task_id="http_currency_converter",
     endpoint="/convert-currency?date={{ ds }}&from=GBP&to=EUR",
     gcs_bucket="dpranantha",
-    gcs_path="/currency_{{ ds }}.json",
+    gcs_path="currency_{{ ds }}.json",
     http_conn_id="currency_converter",
     dag=dag
 )
