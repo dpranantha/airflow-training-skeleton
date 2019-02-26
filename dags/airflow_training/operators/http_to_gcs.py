@@ -42,7 +42,6 @@ class HttpToGcsOperator(BaseOperator):
       # store date locally in temp file
       with NamedTemporaryFile() as tempfile:
           tempfile.write(response.content)
-          # remove file
           tempfile.flush()
 
           #upload to bucket
