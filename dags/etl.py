@@ -72,12 +72,12 @@ gcsBq = GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket="dpranantha",
     source_objects=["{{ ds }}/average/*.parquet"],
-    destination_project_dataset_table="airflowbolcom-4b5ba3f7fec9aea9:airflow.land_registry_price_${{ ds_nodash }}",
+    destination_project_dataset_table="airflowbolcom-4b5ba3f7fec9aea9:airflow.land_registry_price${{ ds_nodash }}",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
     dag=dag, )
 
-load_into_bigquery = DataFlowPythonOperator(
+land_registry_prices_to_bigquery = DataFlowPythonOperator(
     task_id="land_registry_prices_to_bigquery",
     dataflow_default_options={
         'region': "europe-west1",
@@ -93,7 +93,7 @@ load_into_bigquery = DataFlowPythonOperator(
 
 pgsl_to_gcs >> dataproc_create_cluster
 currencies >> dataproc_create_cluster
-pgsl_to_gcs >> load_into_bigquery
-currencies >> load_into_bigquery
+pgsl_to_gcs >> land_registry_prices_to_bigquery
+currencies >> land_registry_prices_to_bigquery
 dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
 dataproc_delete_cluster >> gcsBq
