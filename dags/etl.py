@@ -85,6 +85,8 @@ land_registry_prices_to_bigquery = DataFlowPythonOperator(
         'table': 'land_registry_price_dataflow',
         'dataset': 'airflow',
         'project': 'airflowbolcom-4b5ba3f7fec9aea9',
+        'staging_location': 'gs://dpranantha/{{ ds }}/staging',
+        'temp_location': 'gs://dpranantha/{{ ds }}/temp',
         'job_name': '{{ task_instance_key_str }}'
     },
     py_file="gs://dpranantha/statistics/dataflow_job.py",

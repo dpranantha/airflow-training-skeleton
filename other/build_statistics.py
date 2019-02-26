@@ -17,6 +17,8 @@ spark.read.json(
     "land_registry_price_paid_uk"
 )
 
+spark.table("land_registry_price_paid_uk").show()
+
 # >>> df.printSchema()
 # root
 #  |-- city: string (nullable = true)
@@ -39,6 +41,8 @@ spark.read.json(
 spark.read.json(input_currencies).withColumn(
     "date", col("date").cast("date")
 ).createOrReplaceTempView("currencies")
+
+spark.table("currencies").show()
 
 # >>> df.printSchema()
 # root
@@ -63,8 +67,6 @@ aggregation = spark.sql(
         currencies
     ON
         currencies.date = land_registry_price_paid_uk.transfer_date
-    WHERE
-        transfer_date = '{}'
     GROUP BY
         currency,
         transfer_date,
