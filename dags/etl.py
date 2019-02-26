@@ -29,3 +29,5 @@ http_to_gcs = HttpToGcsOperator(
     http_conn_id="currency_converter",
     dag=dag
 )
+
+pgsl_to_gcs >> http_to_gcs
