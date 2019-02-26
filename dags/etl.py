@@ -30,4 +30,3 @@ http_to_gcs = HttpToGcsOperator(
     dag=dag
 )
 
-pgsl_to_gcs >> http_to_gcs
