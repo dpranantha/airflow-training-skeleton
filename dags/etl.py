@@ -51,8 +51,8 @@ compute_aggregates = DataProcPySparkOperator(
     main='gs://dpranantha/statistics/build_statistics.py',
     cluster_name='analyse-pricing-{{ ds }}',
     arguments=[
-        "gs://dpranantha/{{ ds }}/currency_*.json",
-        "gs://dpranantha/{{ ds }}/land_price_uk_*.json"],
+        "gs://dpranantha/{{ ds }}/land_price_uk_*.json",
+        "gs://dpranantha/{{ ds }}/currency_*.json"],
     dag=dag,
 )
 
