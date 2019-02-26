@@ -71,7 +71,7 @@ gcsBq = GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket="dpranantha",
     source_objects=["{{ ds }}/average/transfer_date={{ ds }}/*"],
-    destination_project_dataset_table="airflow:prices.land_registry_price${{ ds_nodash }}",
+    destination_project_dataset_table="airflowbolcom-4b5ba3f7fec9aea9:airflow.land_registry_price${{ ds_nodash }}",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
     dag=dag, )
