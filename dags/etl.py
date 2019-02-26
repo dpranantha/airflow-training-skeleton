@@ -88,7 +88,7 @@ load_into_bigquery = DataFlowPythonOperator(
         'bucket': 'dpranantha',
         'name': '{{ task_instance_key_str }}'
     },
-    py_file="gs://statistics/dataflow_job.py",
+    py_file="gs://dpranantha/statistics/dataflow_job.py",
     dag=dag,
 )
 
