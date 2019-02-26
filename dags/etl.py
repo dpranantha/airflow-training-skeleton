@@ -23,7 +23,7 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
 
 http_to_gcs = HttpToGcsOperator(
     task_id="http_currency_converter",
-    endpoint="/convert-currency?date={{ ds }}&from=GBP&to=EUR",
+    endpoint="convert-currency?date={{ ds }}&from=GBP&to=EUR",
     gcs_bucket="dpranantha",
     gcs_path="currency_{{ ds }}_{}.json",
     http_conn_id="currency_converter",
