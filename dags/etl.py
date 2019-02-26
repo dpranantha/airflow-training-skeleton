@@ -8,7 +8,7 @@ from airflow.contrib.operators.dataproc_operator import (
     DataProcPySparkOperator,
 )
 from airflow.utils.trigger_rule import TriggerRule
-from airflow_training.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
+# from airflow_training.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
 
 dag = DAG(
     dag_id="etl_airflow",
@@ -67,16 +67,16 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     dag=dag,
 )
 
-gcsBq = GoogleCloudStorageToBigQueryOperator(
-    task_id="write_to_bq",
-    bucket="dpranantha",
-    source_objects=["{{ ds }}/transfer_date={{ ds }}/*"],
-    destination_project_dataset_table="airflow:prices.land_registry_price${{ ds_nodash }}",
-    source_format="PARQUET",
-    write_disposition="WRITE_TRUNCATE",
-    dag=dag, )
+# gcsBq = GoogleCloudStorageToBigQueryOperator(
+#     task_id="write_to_bq",
+#     bucket="dpranantha",
+#     source_objects=["{{ ds }}/transfer_date={{ ds }}/*"],
+#     destination_project_dataset_table="airflow:prices.land_registry_price${{ ds_nodash }}",
+#     source_format="PARQUET",
+#     write_disposition="WRITE_TRUNCATE",
+#     dag=dag, )
 
 pgsl_to_gcs >> dataproc_create_cluster
 currencies >> dataproc_create_cluster
 dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
-dataproc_delete_cluster >> gcsBq
+# dataproc_delete_cluster >> gcsBq
