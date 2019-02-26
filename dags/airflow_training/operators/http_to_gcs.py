@@ -42,10 +42,10 @@ class HttpToGcsOperator(BaseOperator):
       # store date locally in temp file
       with NamedTemporaryFile() as tempfile:
           tempfile.write(response.content)
+          # remove file
+          tempfile.flush()
 
           #upload to bucket
           gcshook = GoogleCloudStorageHook(google_cloud_storage_conn_id=self.google_cloud_storage_conn_id)
           gcshook.upload(bucket=self.gcs_bucket, object=self.gcs_path, filename=tempfile.name)
 
-          #remove file
-          tempfile.flush()
