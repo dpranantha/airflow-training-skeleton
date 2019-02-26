@@ -27,7 +27,9 @@ http_to_gcs = HttpToGcsOperator(
     gcs_bucket="dpranantha",
     gcs_path="/currency_{{ ds }}.json",
     http_conn_id="currency_converter",
+    dag=dag
 )
 
-[pgsl_to_gcs, http_to_gcs]
+pgsl_to_gcs
+http_to_gcs
 
