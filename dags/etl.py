@@ -40,8 +40,9 @@ currencies = [
 dataproc_create_cluster = DataprocClusterCreateOperator(
     task_id="create_dataproc",
     cluster_name="analyse-pricing-{{ ds }}",
-    project_id="Training Boldotcom - dprananth",
-    num_workers=2,
+    project_id="airflowbolcom-4b5ba3f7fec9aea9",
+    num_workers=1,
+    num_preemptible_workers=1,
     zone="europe-west4-a",
     dag=dag,
 )
@@ -59,7 +60,7 @@ compute_aggregates = DataProcPySparkOperator(
 dataproc_delete_cluster = DataprocClusterDeleteOperator(
     task_id="delete_dataproc",
     cluster_name="analyse-pricing-{{ ds }}",
-    project_id="Training Boldotcom - dprananth",
+    project_id="airflowbolcom-4b5ba3f7fec9aea9",
     trigger_rule=TriggerRule.ALL_DONE,
     dag=dag,
 )
