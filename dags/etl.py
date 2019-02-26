@@ -64,4 +64,4 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     dag=dag,
 )
 
-[pgsl_to_gcs, currencies] >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
+[pgsl_to_gcs, (currency for currency in currencies)] >> dataproc_create_cluster >> compute_aggregates >> dataproc_delete_cluster
