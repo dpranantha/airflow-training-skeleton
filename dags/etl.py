@@ -67,14 +67,14 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
     dag=dag,
 )
 
-gcsBq = GoogleCloudStorageToBigQueryOperator(
-    task_id="write_to_bq",
-    bucket="dpranantha",
-    source_objects=["average_prices/transfer_date={{ ds }}/*"],
-    destination_project_dataset_table="gdd-airflow-training:prices.land_registry_price${{ ds_nodash }}",
-    source_format="PARQUET",
-    write_disposition="WRITE_TRUNCATE",
-    dag=dag, )
+# gcsBq = GoogleCloudStorageToBigQueryOperator(
+#     task_id="write_to_bq",
+#     bucket="dpranantha",
+#     source_objects=["{{ ds }}/transfer_date={{ ds }}/*"],
+#     destination_project_dataset_table="gdd-airflow-training:prices.land_registry_price${{ ds_nodash }}",
+#     source_format="PARQUET",
+#     write_disposition="WRITE_TRUNCATE",
+#     dag=dag, )
 
 pgsl_to_gcs >> dataproc_create_cluster
 currencies >> dataproc_create_cluster
