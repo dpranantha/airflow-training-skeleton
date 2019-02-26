@@ -22,7 +22,7 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     postgres_conn_id="pg_landprice",
     sql="select * from land_registry_price_paid_uk where transfer_date = '{{ ds }}' ",
     bucket="dpranantha",
-    filename="land_price_uk_{{ ds }}_{}.json",
+    filename="{{ ds }}/land_price_uk_{}.json",
     dag=dag,
 )
 
@@ -31,7 +31,7 @@ currencies = [
         task_id="get_currency_" + currency,
         endpoint="convert-currency?date={{ ds }}&from=GBP&to=" + currency,
         gcs_bucket="dpranantha",
-        gcs_path="currency_{{ ds }}_" + currency + "_{}.json",
+        gcs_path="{{ ds }}/currency_" + currency + "_{}.json",
         http_conn_id="currency_converter",
         dag=dag,
     ) for currency in ['EUR', 'USD']
@@ -51,8 +51,8 @@ compute_aggregates = DataProcPySparkOperator(
     main='gs://dpranantha/statistics/build_statistics.py',
     cluster_name='analyse-pricing-{{ ds }}',
     arguments=[
-        "gs://dpranantha/currency_{{ ds }}*.json",
-        "gs://dpranantha/land_price_uk_{{ ds }}*.json"],
+        "gs://dpranantha/{{ ds }}/currency_*.json",
+        "gs://dpranantha/{{ ds }}/land_price_uk_*.json"],
     dag=dag,
 )
 
