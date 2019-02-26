@@ -1,6 +1,7 @@
 import airflow
 from airflow import DAG
 from airflow_training.operators.postgres_to_gcs import PostgresToGoogleCloudStorageOperator
+from airflow_training.operators.http_to_gcs import HttpToGcsOperator
 
 dag = DAG(
     dag_id="etl_airflow",
@@ -16,8 +17,17 @@ pgsl_to_gcs = PostgresToGoogleCloudStorageOperator(
     postgres_conn_id="pg_landprice",
     sql="select * from land_registry_price_paid_uk where transfer_date = '{{ ds }}' ",
     bucket="dpranantha",
-    filename="land_price_uk_{{ ds }}.json",
+    filename="land_price_uk_{{ ds }}_{}.json",
     dag=dag,
 )
 
-pgsl_to_gcs
+http_to_gcs = HttpToGcsOperator(
+    task_id="http_currency_converter",
+    endpoint="/convert-currency?date={{ ds }}&from=GBP&to=EUR",
+    gcs_bucket="dpranantha",
+    gcs_path="/currency_{{ ds }}.json",
+    http_conn_id="currency_converter",
+)
+
+[pgsl_to_gcs, http_to_gcs]
+
