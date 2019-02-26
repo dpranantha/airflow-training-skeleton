@@ -85,8 +85,7 @@ load_into_bigquery = DataFlowPythonOperator(
         'table': 'land_registry_price_dataflow',
         'dataset': 'airflow',
         'project': 'airflowbolcom-4b5ba3f7fec9aea9',
-        'bucket': 'dpranantha',
-        'name': '{{ task_instance_key_str }}'
+        'job_name': '{{ task_instance_key_str }}'
     },
     py_file="gs://dpranantha/statistics/dataflow_job.py",
     dag=dag,
