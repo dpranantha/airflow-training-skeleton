@@ -9,6 +9,7 @@ from airflow.contrib.operators.dataproc_operator import (
 )
 from airflow.utils.trigger_rule import TriggerRule
 from airflow_training.operators.gcs_to_bq import GoogleCloudStorageToBigQueryOperator
+# from airflow.contrib.operators.dataflow_operator import DataFlowPythonOperator
 
 dag = DAG(
     dag_id="etl_airflow",
@@ -70,11 +71,26 @@ dataproc_delete_cluster = DataprocClusterDeleteOperator(
 gcsBq = GoogleCloudStorageToBigQueryOperator(
     task_id="write_to_bq",
     bucket="dpranantha",
-    source_objects=["{{ ds }}/average/*"],
+    source_objects=["{{ ds }}/average/*.parquet"],
     destination_project_dataset_table="airflowbolcom-4b5ba3f7fec9aea9:airflow.land_registry_price${{ ds_nodash }}",
     source_format="PARQUET",
     write_disposition="WRITE_TRUNCATE",
     dag=dag, )
+
+# load_into_bigquery = DataFlowPythonOperator(
+#     task_id="land_registry_prices_to_bigquery",
+#     dataflow_default_options={
+#         'region': "europe-west1",
+#         'input': 'gs://dpranantha/{{ ds }}/land_price_uk_*.json',
+#         'table': 'land_registry_price_dataflow',
+#         'dataset': 'airflow',
+#         'project': 'airflowbolcom-4b5ba3f7fec9aea9',
+#         'bucket': 'dpranantha',
+#         'name': '{{ task_instance_key_str }}'
+#     },
+#     py_file="gs://statistics/dataflow_job.py",
+#     dag=dag,
+# )
 
 pgsl_to_gcs >> dataproc_create_cluster
 currencies >> dataproc_create_cluster
